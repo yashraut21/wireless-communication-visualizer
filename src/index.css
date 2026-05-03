@@ -1,0 +1,275 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+/* ============================================
+   WIRELESS COMMS VISUALIZED — Design System
+   ============================================ */
+
+@theme {
+  /* Background layers */
+  --color-bg-primary: oklch(0.13 0.015 260);
+  --color-bg-secondary: oklch(0.16 0.018 260);
+  --color-bg-tertiary: oklch(0.20 0.02 260);
+  --color-bg-elevated: oklch(0.24 0.022 260);
+
+  /* Accent colors */
+  --color-accent-teal: oklch(0.75 0.15 185);
+  --color-accent-blue: oklch(0.65 0.18 250);
+  --color-accent-violet: oklch(0.62 0.2 290);
+  --color-accent-amber: oklch(0.82 0.14 80);
+  --color-accent-green: oklch(0.75 0.15 155);
+  --color-accent-red: oklch(0.68 0.18 25);
+  --color-accent-cyan: oklch(0.78 0.12 200);
+
+  /* Text */
+  --color-text-primary: oklch(0.95 0.005 260);
+  --color-text-secondary: oklch(0.72 0.01 260);
+  --color-text-tertiary: oklch(0.50 0.01 260);
+  --color-text-inverse: oklch(0.13 0.015 260);
+
+  /* Borders */
+  --color-border-subtle: oklch(0.25 0.015 260);
+  --color-border-default: oklch(0.30 0.02 260);
+  --color-border-accent: oklch(0.75 0.15 185 / 0.3);
+
+  /* Shadows */
+  --shadow-glow-teal: 0 0 20px oklch(0.75 0.15 185 / 0.15);
+  --shadow-glow-violet: 0 0 20px oklch(0.62 0.2 290 / 0.15);
+  --shadow-elevated: 0 8px 32px oklch(0 0 0 / 0.4);
+
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Spacing scale */
+  --spacing-section: 6rem;
+
+  /* Radius */
+  --radius-card: 1rem;
+  --radius-button: 0.625rem;
+  --radius-pill: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Base reset ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Typography ---- */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 3.5vw, 2.5rem); }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
+
+a {
+  color: var(--color-accent-teal);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-accent-cyan);
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-default);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+/* ---- Glass card utility ---- */
+.glass-card {
+  background: oklch(1 0 0 / 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid oklch(1 0 0 / 0.08);
+  border-radius: var(--radius-card);
+  transition: all var(--transition-base);
+}
+
+.glass-card:hover {
+  background: oklch(1 0 0 / 0.06);
+  border-color: oklch(1 0 0 / 0.12);
+  box-shadow: var(--shadow-glow-teal);
+}
+
+/* ---- Gradient text ---- */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-accent-teal), var(--color-accent-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Animated gradient background ---- */
+.gradient-bg-animated {
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-primary),
+    var(--color-bg-secondary),
+    oklch(0.16 0.04 250),
+    var(--color-bg-secondary)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ---- Pulse glow ---- */
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 5px oklch(0.75 0.15 185 / 0.2); }
+  50% { box-shadow: 0 0 20px oklch(0.75 0.15 185 / 0.4); }
+}
+
+/* ---- Section layout ---- */
+.section-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .section-container {
+    padding: 0 1rem;
+  }
+}
+
+/* ---- Interactive panel styling ---- */
+.param-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-bg-tertiary);
+  outline: none;
+  transition: background var(--transition-fast);
+}
+
+.param-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-accent-teal);
+  cursor: pointer;
+  box-shadow: 0 0 6px oklch(0.75 0.15 185 / 0.4);
+  transition: transform var(--transition-fast);
+}
+
+.param-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.param-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-accent-teal);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 6px oklch(0.75 0.15 185 / 0.4);
+}
+
+/* ---- KaTeX overrides for dark mode ---- */
+.katex {
+  color: var(--color-text-primary) !important;
+  font-size: 1.1em !important;
+}
+
+.katex-display {
+  margin: 1.5rem 0 !important;
+  padding: 1.25rem;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border-subtle);
+  overflow-x: auto;
+}
+
+/* ---- Loading skeleton ---- */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-secondary) 25%,
+    var(--color-bg-tertiary) 50%,
+    var(--color-bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-button);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---- Focus styles for accessibility ---- */
+:focus-visible {
+  outline: 2px solid var(--color-accent-teal);
+  outline-offset: 2px;
+}
+
+/* ---- Selection ---- */
+::selection {
+  background: oklch(0.75 0.15 185 / 0.3);
+  color: var(--color-text-primary);
+}
