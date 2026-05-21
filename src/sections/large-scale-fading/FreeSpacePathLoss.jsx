@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ParameterSlider, InfoCallout } from '../../components/interactive/ParameterPanel';
 import { Equation, EquationCard } from '../../components/math/Equation';
+import { InlineMath } from 'react-katex';
 import { LineChart } from '../../components/charts/LineChart';
 import { fsplDb, formatFrequency } from '../../utils/wireless-math';
 
@@ -117,7 +118,7 @@ export default function FreeSpacePathLoss() {
 
         <div className="grid md:grid-cols-2 gap-4 mb-8">
           <InfoCallout type="aha" title="The 20 dB / Decade Rule">
-            Because FSPL is proportional to $d^2$, every time you multiply the distance by 10 (a decade), 
+            Because FSPL is proportional to <InlineMath math="d^2" />, every time you multiply the distance by 10 (a decade), 
             the path loss increases by exactly <strong>20 dB</strong>. 
             Similarly, doubling the distance adds exactly <strong>~6 dB</strong> of loss.
           </InfoCallout>
@@ -128,6 +129,39 @@ export default function FreeSpacePathLoss() {
             To maintain the same gain, a higher frequency antenna must be physically smaller, 
             meaning its effective aperture (capture area) is smaller.
           </InfoCallout>
+        </div>
+
+        {/* Quick-reference table */}
+        <div className="glass-card p-6 mb-8">
+          <h3 className="text-base font-semibold mb-4">FSPL Quick Reference — Common Scenarios</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">Scenario</th>
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">Frequency</th>
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">Distance</th>
+                  <th className="text-left py-2 text-white/50 font-medium">FSPL</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {[
+                  { scenario: '2.4 GHz WiFi (indoor)', f: '2,400 MHz', d: '10 m', loss: (32.44 + 20*Math.log10(0.01) + 20*Math.log10(2400)).toFixed(1) },
+                  { scenario: 'GSM-900 (urban cell)', f: '900 MHz', d: '3 km', loss: (32.44 + 20*Math.log10(3) + 20*Math.log10(900)).toFixed(1) },
+                  { scenario: '4G LTE (suburban)', f: '1,800 MHz', d: '1 km', loss: (32.44 + 20*Math.log10(1) + 20*Math.log10(1800)).toFixed(1) },
+                  { scenario: '5G mmWave (small cell)', f: '28,000 MHz', d: '150 m', loss: (32.44 + 20*Math.log10(0.15) + 20*Math.log10(28000)).toFixed(1) },
+                  { scenario: 'GEO Satellite (Ku-band)', f: '12,000 MHz', d: '35,786 km', loss: (32.44 + 20*Math.log10(35786) + 20*Math.log10(12000)).toFixed(1) },
+                ].map((row) => (
+                  <tr key={row.scenario}>
+                    <td className="py-2.5 pr-4 text-white/80">{row.scenario}</td>
+                    <td className="py-2.5 pr-4 font-mono text-white/60">{row.f}</td>
+                    <td className="py-2.5 pr-4 font-mono text-white/60">{row.d}</td>
+                    <td className="py-2.5 font-mono font-semibold" style={{ color: 'var(--color-accent-teal)' }}>{row.loss} dB</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         
       </motion.div>

@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ParameterSlider, InfoCallout } from '../../components/interactive/ParameterPanel';
 import { Equation, EquationCard } from '../../components/math/Equation';
+import { InlineMath } from 'react-katex';
 import { LineChart } from '../../components/charts/LineChart';
 import { besselI0 } from '../../utils/wireless-math';
 
@@ -84,7 +85,7 @@ export default function RayleighRicean() {
 
               <div className="mt-6 pt-4 border-t border-white/10 flex flex-col gap-4">
                 <div className="flex justify-between items-center">
-                  <div className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>LOS Peak Amplitude ($A$)</div>
+                  <div className="text-sm flex items-center gap-1" style={{ color: 'var(--color-text-tertiary)' }}>LOS Peak Amplitude (<InlineMath math="A" />)</div>
                   <div className="font-mono text-lg font-bold" style={{ color: 'var(--color-accent-teal)' }}>
                     {A.toFixed(2)}
                   </div>
@@ -128,10 +129,41 @@ export default function RayleighRicean() {
         </div>
         
         <InfoCallout type="aha" title="What does the K-factor physically mean?">
-          $K = A^2 / (2\sigma^2)$. It is literally the ratio of the power in the direct path to the total power in all 
-          the scattered paths. A high K-factor means a very stable connection (like satellite TV). A K-factor of 0 (linear) 
-          means a wildly fluctuating connection (like your cell phone deep inside a building).
+          <InlineMath math="K = A^2 / (2\sigma^2)" /> — literally the ratio of power in the direct LOS path to the total
+          scattered power. A high K-factor means a very stable connection (like satellite TV). K&nbsp;=&nbsp;0 (linear)
+          means a wildly fluctuating connection (like your phone deep inside a building).
         </InfoCallout>
+
+        {/* Practical K-factor reference */}
+        <div className="glass-card p-6 mb-8">
+          <h3 className="text-base font-semibold mb-4">Practical K-Factor Reference</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">Environment</th>
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">Typical K (dB)</th>
+                  <th className="text-left py-2 text-white/50 font-medium">Fading Severity</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {[
+                  { env: 'GEO Satellite link (clear sky)', k: '> 15 dB', severity: 'Very mild — near AWGN', color: '#10b981' },
+                  { env: 'Indoor office with visible AP', k: '6–10 dB', severity: 'Mild (Ricean)', color: '#06b6d4' },
+                  { env: 'Suburban outdoor (low rise)', k: '0–6 dB', severity: 'Moderate', color: '#f59e0b' },
+                  { env: 'Urban street level (NLOS)', k: '–5 to 0 dB', severity: 'Severe (near Rayleigh)', color: '#ef4444' },
+                  { env: 'Dense urban / deep indoor', k: '→ –∞ (Rayleigh)', severity: 'Worst case', color: '#ef4444' },
+                ].map((row) => (
+                  <tr key={row.env}>
+                    <td className="py-2.5 pr-4 text-white/80">{row.env}</td>
+                    <td className="py-2.5 pr-4 font-mono font-semibold" style={{ color: row.color }}>{row.k}</td>
+                    <td className="py-2.5 text-white/60">{row.severity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

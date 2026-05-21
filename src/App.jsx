@@ -72,6 +72,13 @@ const FadingPro = lazy(() => import('./sections/playground/FadingPro'));
 const ArrayDesigner = lazy(() => import('./sections/playground/ArrayDesigner'));
 const ConstellationViz = lazy(() => import('./sections/playground/ConstellationViz'));
 
+/* Section 11 — Engineer's Toolkit */
+const ToolkitIndex = lazy(() => import('./sections/toolkit/ToolkitIndex'));
+const ToolkitFlowchart = lazy(() => import('./sections/toolkit/ToolkitFlowchart'));
+const DecisionTree = lazy(() => import('./sections/toolkit/DecisionTree'));
+const EngScenarios = lazy(() => import('./sections/toolkit/EngScenarios'));
+const EngPitfalls = lazy(() => import('./sections/toolkit/EngPitfalls'));
+
 const ComingSoon = lazy(() => import('./sections/shared/ComingSoon'));
 
 function PageLoader() {
@@ -165,8 +172,12 @@ const router = createBrowserRouter([
       { path: 'playground/array-designer', element: <SuspenseWrap><ArrayDesigner /></SuspenseWrap> },
       { path: 'playground/constellation', element: <SuspenseWrap><ConstellationViz /></SuspenseWrap> },
 
-      /* Future sections — placeholders */
-      { path: 'toolkit/*', element: <SuspenseWrap><ComingSoon /></SuspenseWrap> },
+      /* Section 11 — Engineer's Toolkit */
+      { path: 'toolkit', element: <SuspenseWrap><ToolkitIndex /></SuspenseWrap> },
+      { path: 'toolkit/flowchart', element: <SuspenseWrap><ToolkitFlowchart /></SuspenseWrap> },
+      { path: 'toolkit/decision-tree', element: <SuspenseWrap><DecisionTree /></SuspenseWrap> },
+      { path: 'toolkit/scenarios', element: <SuspenseWrap><EngScenarios /></SuspenseWrap> },
+      { path: 'toolkit/pitfalls', element: <SuspenseWrap><EngPitfalls /></SuspenseWrap> },
 
       /* Catch-all */
       { path: '*', element: <SuspenseWrap><ComingSoon /></SuspenseWrap> },

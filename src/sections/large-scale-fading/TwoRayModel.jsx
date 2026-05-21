@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ParameterSlider, InfoCallout } from '../../components/interactive/ParameterPanel';
 import { Equation, EquationCard } from '../../components/math/Equation';
+import { InlineMath } from 'react-katex';
 import { LineChart } from '../../components/charts/LineChart';
 import { twoRayReceivedPower, twoRayBreakpoint, wavelength, fsplDb } from '../../utils/wireless-math';
 
@@ -143,17 +144,17 @@ export default function TwoRayModel() {
 
         <div className="grid md:grid-cols-2 gap-4 mb-8">
           <InfoCallout type="aha" title="The 40 dB / Decade Rule">
-            Beyond the breakpoint distance, the direct and reflected waves become out of phase in a way that causes 
-            signal power to decay as $d^4$ instead of $d^2$. This means every 10x increase in distance causes a 
-            <strong>40 dB</strong> drop in power, rather than 20 dB!
+            Beyond the breakpoint distance, the direct and reflected waves become out of phase in a way that causes
+            signal power to decay as <InlineMath math="d^4" /> instead of <InlineMath math="d^2" />. This means every 10× increase
+            in distance causes a <strong>40 dB</strong> drop in power, rather than 20 dB!
           </InfoCallout>
           
           <div className="glass-card p-6">
             <h3 className="text-base font-semibold mb-3">Approximate Far-Field Formula</h3>
             <Equation math="P_r \approx P_t G_t G_r \frac{h_t^2 h_r^2}{d^4}" />
             <p className="text-sm mt-3" style={{ color: 'var(--color-text-secondary)' }}>
-              Notice that for $d \gg d_f$, the received power is entirely independent of frequency ($\lambda$)! 
-              It depends only on antenna heights and distance.
+              Notice that for <InlineMath math="d \gg d_f" />, the received power is entirely independent of frequency
+              (<InlineMath math="\lambda" />)! It depends only on antenna heights and distance.
             </p>
           </div>
         </div>

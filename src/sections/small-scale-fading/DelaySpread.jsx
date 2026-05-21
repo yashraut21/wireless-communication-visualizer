@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ParameterSlider, InfoCallout } from '../../components/interactive/ParameterPanel';
 import { Equation, EquationCard } from '../../components/math/Equation';
+import { InlineMath } from 'react-katex';
 import { LineChart } from '../../components/charts/LineChart';
 import { coherenceBandwidth, formatFrequency } from '../../utils/wireless-math';
 
@@ -69,8 +70,9 @@ export default function DelaySpread() {
         </div>
         <h1 className="mb-3">Delay Spread & Coherence Bandwidth</h1>
         <p className="text-lg mb-8 max-w-2xl" style={{ color: 'var(--color-text-secondary)' }}>
-          Time-domain multipath delay spread directly causes frequency-selective fading. 
-          The Coherence Bandwidth ($B_c$) is the range of frequencies over which the channel passes all spectral components with approximately equal gain.
+          Time-domain multipath delay spread directly causes frequency-selective fading.
+          The Coherence Bandwidth (<InlineMath math="B_c" />) is the range of frequencies over which the channel passes all
+          spectral components with approximately equal gain.
         </p>
 
         <div className="grid lg:grid-cols-12 gap-6 mb-8">
@@ -102,7 +104,7 @@ export default function DelaySpread() {
 
               <div className="mt-6 pt-4 border-t border-white/10 flex flex-col gap-4">
                 <div className="flex justify-between items-center">
-                  <div className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>Coherence Bandwidth ($B_c$)</div>
+                  <div className="text-sm flex items-center gap-1" style={{ color: 'var(--color-text-tertiary)' }}>Coherence Bandwidth (<InlineMath math="B_c" />)</div>
                   <div className="font-mono text-lg font-bold" style={{ color: 'var(--color-accent-teal)' }}>
                     {formatFrequency(bcHz)}
                   </div>
@@ -157,12 +159,45 @@ export default function DelaySpread() {
           <div className="glass-card p-6">
             <h3 className="text-base font-semibold mb-3">How do we fix Frequency Selective Fading?</h3>
             <p className="text-sm mb-3" style={{ color: 'var(--color-text-secondary)' }}>
-              When $B_s &gt; B_c$, the delayed echoes cause consecutive symbols to overlap in time (ISI). To fix this, engineers use:
+              When <InlineMath math="B_s > B_c" />, the delayed echoes cause consecutive symbols to overlap in time (ISI). To fix this, engineers use:
             </p>
             <ul className="text-sm space-y-2 list-disc pl-5" style={{ color: 'var(--color-text-secondary)' }}>
               <li><strong>Equalization:</strong> A filter at the receiver that attempts to invert the channel response (used in 2G/3G).</li>
               <li><strong>OFDM:</strong> Splitting the wideband signal into many narrowband subcarriers so each experiences flat fading (used in 4G/5G/Wi-Fi).</li>
             </ul>
+          </div>
+        </div>
+
+        {/* Delay spread reference table */}
+        <div className="glass-card p-6 mb-8">
+          <h3 className="text-base font-semibold mb-4">Typical Delay Spread & Coherence Bandwidth by Environment</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">Environment</th>
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">RMS Delay Spread</th>
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">Coherence BW (B<sub>c</sub>)</th>
+                  <th className="text-left py-2 text-white/50 font-medium">Max signal BW (flat fading)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {[
+                  { env: 'Indoor (office/home)', delay: '10–50 ns', bc: '4–50 MHz', max: '< 4 MHz (very wideband is selective!)' },
+                  { env: 'Microcell (urban street)', delay: '100–300 ns', bc: '660 kHz – 2 MHz', max: '< 660 kHz' },
+                  { env: 'Typical urban (macro)', delay: '1–3 µs', bc: '65–330 kHz', max: '< 65 kHz → LTE uses OFDM!' },
+                  { env: 'Suburban (low density)', delay: '200–500 ns', bc: '330 kHz – 1 MHz', max: '< 330 kHz' },
+                  { env: 'Hilly/rural terrain', delay: '3–20 µs', bc: '10–65 kHz', max: '< 10 kHz → equalizer mandatory' },
+                ].map((row) => (
+                  <tr key={row.env}>
+                    <td className="py-2.5 pr-4 text-white/80">{row.env}</td>
+                    <td className="py-2.5 pr-4 font-mono font-semibold" style={{ color: 'var(--color-accent-blue)' }}>{row.delay}</td>
+                    <td className="py-2.5 pr-4 font-mono font-semibold" style={{ color: 'var(--color-accent-teal)' }}>{row.bc}</td>
+                    <td className="py-2.5 text-white/50 text-xs">{row.max}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </motion.div>

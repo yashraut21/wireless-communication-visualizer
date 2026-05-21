@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ParameterSlider, InfoCallout } from '../../components/interactive/ParameterPanel';
 import { EquationCard } from '../../components/math/Equation';
+import { InlineMath } from 'react-katex';
 import { LineChart } from '../../components/charts/LineChart';
 
 export default function CDMASpreading() {
@@ -128,7 +129,9 @@ export default function CDMASpreading() {
             />
             
             <InfoCallout type="tip" title="Despreading at Receiver">
-              The receiver multiplies the noisy incoming signal by the <em>exact same</em> code $c(t)$. Because $c(t) \cdot c(t) = 1$, the original data pops back out! Other users' codes look like random noise and get suppressed by the Processing Gain.
+            The receiver multiplies the noisy incoming signal by the <em>exact same</em> code <InlineMath math="c(t)" />. Because
+              <InlineMath math="c(t) \cdot c(t) = 1" />, the original data pops back out! Other users' codes look like random
+              noise and get suppressed by the Processing Gain.
             </InfoCallout>
           </div>
 

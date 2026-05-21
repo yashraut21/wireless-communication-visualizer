@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { ParameterSlider, InfoCallout } from '../../components/interactive/ParameterPanel';
 import { Equation, EquationCard } from '../../components/math/Equation';
+import { InlineMath } from 'react-katex';
 import { LineChart } from '../../components/charts/LineChart';
 import { dopplerShift, coherenceTime } from '../../utils/wireless-math';
 
@@ -122,14 +123,14 @@ export default function DopplerSpread() {
 
               <div className="mt-6 pt-4 border-t border-white/10 flex flex-col gap-4">
                 <div className="flex justify-between items-center">
-                  <div className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>Max Doppler Shift ($f_m$)</div>
+                  <div className="text-sm flex items-center gap-1" style={{ color: 'var(--color-text-tertiary)' }}>Max Doppler Shift (<InlineMath math="f_m" />)</div>
                   <div className="font-mono text-lg font-bold" style={{ color: 'var(--color-accent-violet)' }}>
                     {maxDopplerHz.toFixed(1)} Hz
                   </div>
                 </div>
                 
                 <div className="flex justify-between items-center">
-                  <div className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>Coherence Time ($T_c$)</div>
+                  <div className="text-sm flex items-center gap-1" style={{ color: 'var(--color-text-tertiary)' }}>Coherence Time (<InlineMath math="T_c" />)</div>
                   <div className="font-mono text-lg font-bold" style={{ color: 'var(--color-accent-teal)' }}>
                     {tcSeconds === Infinity ? '∞' : `${(tcSeconds * 1000).toFixed(1)} ms`}
                   </div>
@@ -197,6 +198,39 @@ export default function DopplerSpread() {
             math="T_c \approx \frac{0.423}{f_m}" 
             description="The time duration over which the channel response is considered highly correlated (constant)." 
           />
+        </div>
+
+        {/* Practical reference table */}
+        <div className="glass-card p-6 mb-8">
+          <h3 className="text-base font-semibold mb-4">Coherence Time by Mobility Scenario (at 900 MHz)</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">Scenario</th>
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">Speed</th>
+                  <th className="text-left py-2 pr-4 text-white/50 font-medium">f<sub>m</sub> (900 MHz)</th>
+                  <th className="text-left py-2 text-white/50 font-medium">T<sub>c</sub></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {[
+                  { scenario: 'Stationary device', v: '0 km/h', fm: '0 Hz', tc: '∞', color: '#10b981' },
+                  { scenario: 'Pedestrian', v: '5 km/h', fm: '4.2 Hz', tc: '101 ms', color: '#06b6d4' },
+                  { scenario: 'Urban vehicle', v: '60 km/h', fm: '50 Hz', tc: '8.5 ms', color: '#f59e0b' },
+                  { scenario: 'Highway vehicle', v: '120 km/h', fm: '100 Hz', tc: '4.2 ms', color: '#ef4444' },
+                  { scenario: 'High-speed rail', v: '300 km/h', fm: '250 Hz', tc: '1.7 ms', color: '#ef4444' },
+                ].map((row) => (
+                  <tr key={row.scenario}>
+                    <td className="py-2.5 pr-4 text-white/80">{row.scenario}</td>
+                    <td className="py-2.5 pr-4 font-mono text-white/60">{row.v}</td>
+                    <td className="py-2.5 pr-4 font-mono font-semibold" style={{ color: row.color }}>{row.fm}</td>
+                    <td className="py-2.5 font-mono font-semibold" style={{ color: 'var(--color-accent-teal)' }}>{row.tc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </motion.div>
     </div>
